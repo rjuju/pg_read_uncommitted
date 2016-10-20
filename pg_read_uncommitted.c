@@ -28,8 +28,6 @@ static ExecutorStart_hook_type prev_ExecutorStart = NULL;
 
 void	_PG_init(void);
 void	_PG_fini(void);
-bool HeapTupleSatisfiesAll(HeapTuple htup, Snapshot snapshot,
-								   Buffer buffer);
 
 static void pgru_ExecutorStart(QueryDesc *queryDesc, int eflags);
 
@@ -79,7 +77,7 @@ pgru_ExecutorStart (QueryDesc *queryDesc, int eflags)
 	if (pgru_enabled)
 	{
 		if (pgru_show_deleted)
-			queryDesc->snapshot->satisfies = HeapTupleSatisfiesAll;
+			queryDesc->snapshot->satisfies = HeapTupleSatisfiesAny;
 		else
 			queryDesc->snapshot->satisfies = HeapTupleSatisfiesDirty;
 	}
@@ -88,12 +86,4 @@ pgru_ExecutorStart (QueryDesc *queryDesc, int eflags)
 		prev_ExecutorStart(queryDesc, eflags);
 	else
 		standard_ExecutorStart(queryDesc, eflags);
-}
-
-bool
-HeapTupleSatisfiesAll(HeapTuple htup, Snapshot snapshot,
-								   Buffer buffer)
-{
-	/* don't care, return anything found */
-	return true;
 }
