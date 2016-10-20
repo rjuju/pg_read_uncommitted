@@ -1,11 +1,7 @@
 /*
- * pg_stat_kcache (kcache)
+ * pg_read_uncommitted
  *
- * Provides basic statistics about real I/O done by the filesystem layer.
- * This way, calculating a real hit-ratio is doable.
- *
- * Large portions of code freely inspired by pg_stat_plans. Thanks to Peter
- * Geoghegan for this great extension.
+ * Enable read uncommitted visiblity, and deleted tuples visiblity.
  *
  * This program is open source, licensed under the PostgreSQL license.
  * For license terms, see the LICENSE file.
@@ -16,9 +12,6 @@
 #include "executor/executor.h"
 #include "funcapi.h"
 #include "miscadmin.h"
-//#include "storage/fd.h"
-//#include "storage/ipc.h"
-//#include "storage/spin.h"
 #include "utils/builtins.h"
 #include "utils/guc.h"
 #include "utils/snapshot.h"
