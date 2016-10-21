@@ -74,7 +74,8 @@ _PG_fini(void)
 static void
 pgru_ExecutorStart (QueryDesc *queryDesc, int eflags)
 {
-	if (pgru_enabled)
+	/* do not mess with non MVCC snapshots, like index build :) */
+	if (pgru_enabled && IsMVCCSnapshot(queryDesc->snapshot))
 	{
 		if (pgru_show_deleted)
 			queryDesc->snapshot->satisfies = HeapTupleSatisfiesAny;
