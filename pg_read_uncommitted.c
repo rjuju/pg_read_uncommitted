@@ -84,12 +84,15 @@ pgru_ExecutorStart (QueryDesc *queryDesc, int eflags)
 		if (pgru_show_deleted)
 #if PG_VERSION_NUM >= 120000
 			queryDesc->snapshot->snapshot_type = SNAPSHOT_ANY;
-		else
-			queryDesc->snapshot->snapshot_type = SNAPSHOT_DIRTY;
 #else
 			queryDesc->snapshot->satisfies = HeapTupleSatisfiesAny;
+#endif
 		else
-			queryDesc->snapshot->satisfies = HeapTupleSatisfiesDirty;
+
+#if PG_VERSION_NUM >= 120000
+                        queryDesc->snapshot->snapshot_type = SNAPSHOT_DIRTY;
+#else
+                        queryDesc->snapshot->satisfies = HeapTupleSatisfiesDirty;
 #endif
 	}
 
