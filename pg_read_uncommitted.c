@@ -33,7 +33,6 @@ static ExecutorStart_hook_type prev_ExecutorStart = NULL;
 /*--- Functions --- */
 
 void	_PG_init(void);
-void	_PG_fini(void);
 
 static void pgru_ExecutorStart(QueryDesc *queryDesc, int eflags);
 
@@ -68,13 +67,6 @@ _PG_init(void)
 							 NULL,
 							 NULL,
 							 NULL);
-}
-
-void
-_PG_fini(void)
-{
-	/* uninstall hook */
-	ExecutorStart_hook = prev_ExecutorStart;
 }
 
 static void
