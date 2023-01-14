@@ -42,5 +42,4 @@ License
 
 pg_read_uncommitted is free software distributed under the PostgreSQL license.
 
-Copyright (c) 2016-2022, Julien Rouhaud.
-
+Copyright (c) 2016-2023, Julien Rouhaud.

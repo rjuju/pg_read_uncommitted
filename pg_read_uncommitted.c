@@ -6,7 +6,7 @@
  * This program is open source, licensed under the PostgreSQL license.
  * For license terms, see the LICENSE file.
  *
- * Copyright (C) 2014-2022: Julien Rouhaud
+ * Copyright (C) 2016-2023: Julien Rouhaud
  *
  */
 #include "postgres.h"
