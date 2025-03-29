@@ -82,11 +82,10 @@ pgru_ExecutorStart (QueryDesc *queryDesc, int eflags)
 			queryDesc->snapshot->satisfies = HeapTupleSatisfiesAny;
 #endif
 		else
-
 #if PG_VERSION_NUM >= 120000
-                        queryDesc->snapshot->snapshot_type = SNAPSHOT_DIRTY;
+			queryDesc->snapshot->snapshot_type = SNAPSHOT_DIRTY;
 #else
-                        queryDesc->snapshot->satisfies = HeapTupleSatisfiesDirty;
+			queryDesc->snapshot->satisfies = HeapTupleSatisfiesDirty;
 #endif
 	}
 
