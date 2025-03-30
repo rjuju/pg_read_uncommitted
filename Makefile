@@ -1,3 +1,5 @@
+REGRESS      = basic
+
 MODULE_big = pg_read_uncommitted
 OBJS = pg_read_uncommitted.o
 
