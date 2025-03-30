@@ -1,0 +1,48 @@
+name: Regression tests
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: sh
+
+    strategy:
+      matrix:
+        pgversion:
+          - 13
+          - 14
+          - 15
+          - 16
+          - 17
+
+    env:
+      PGVERSION: ${{ matrix.pgversion }}
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v4
+
+    - name: Install PostgreSQL ${{ matrix.pgversion }}
+      run: |
+        sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -v ${PGVERSION} -p -i
+        sudo -u postgres createuser -s "$USER"
+
+    - name: Build pg_read_uncommitted
+      run: |
+        make PROFILE="-Werror"
+        sudo -E make install
+
+    - name: Run regression tests
+      run: |
+        make installcheck
+
+    - name: Show regression diffs
+      if: ${{ failure() }}
+      run: |
+        cat regression.diffs
