@@ -23,8 +23,15 @@
 #include "utils/tqual.h"
 #endif
 
-
 PG_MODULE_MAGIC;
+
+/* ExecutorStart hook */
+#if PG_VERSION_NUM >= 180000
+#define EXEC_START_RET	bool
+#else
+#define EXEC_START_RET	void
+#endif
+/* end of ExecutorStart hook */
 
 
 /* saved hook address in case of unload */
@@ -34,7 +41,7 @@ static ExecutorStart_hook_type prev_ExecutorStart = NULL;
 
 void	_PG_init(void);
 
-static void pgru_ExecutorStart(QueryDesc *queryDesc, int eflags);
+static EXEC_START_RET pgru_ExecutorStart(QueryDesc *queryDesc, int eflags);
 
 static bool pgru_enabled;
 static bool pgru_show_deleted;
@@ -69,7 +76,7 @@ _PG_init(void)
 							 NULL);
 }
 
-static void
+static EXEC_START_RET
 pgru_ExecutorStart (QueryDesc *queryDesc, int eflags)
 {
 	/* do not mess with non MVCC snapshots, like index build :) */
@@ -90,7 +97,7 @@ pgru_ExecutorStart (QueryDesc *queryDesc, int eflags)
 	}
 
 	if (prev_ExecutorStart)
-		prev_ExecutorStart(queryDesc, eflags);
+		return prev_ExecutorStart(queryDesc, eflags);
 	else
-		standard_ExecutorStart(queryDesc, eflags);
+		return standard_ExecutorStart(queryDesc, eflags);
 }
